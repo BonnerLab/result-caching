@@ -7,7 +7,7 @@ Results can be stored either on disk or in memory.
 
 ## Quick setup
 ```
-pip install git+https://github.com/mschrimpf/result_caching
+pip install git+https://github.com/BonnerLab/result_caching
 ```
 
 ## Usage example
