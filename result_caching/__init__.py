@@ -88,7 +88,7 @@ class _Storage(object):
     def getcallargs(self, function, *args, **kwargs):
         call_args = inspect.getcallargs(function, *args, **kwargs)
         argspec = inspect.getfullargspec(function)
-        argspec = argspec.args + \
+        argspec = argspec.args + (argspec.kwonlyargs if argspec.kwonlyargs else []) + \
                   ([argspec.varargs] if argspec.varargs else []) + ([argspec.varkw] if argspec.varkw else [])
         sorting = {arg: i for i, arg in enumerate(argspec)}
         return OrderedDict(sorted(call_args.items(), key=lambda pair: sorting[pair[0]]))
@@ -148,7 +148,7 @@ class _NetcdfStorage(_DiskStorage):
 
     def save_file(self, result, savepath_part):
         result_coords = [coord for coord, values in self.walk_coords(result)]
-        result = result.reset_index(result.indexes.keys())
+        result = result.reset_index(list(result.indexes.keys()))
         # for some reason, the above operation suffixes single-index coordinates with _
         coords = {}
         for coord, values in self.walk_coords(result):
