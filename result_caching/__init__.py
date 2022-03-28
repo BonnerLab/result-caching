@@ -1,5 +1,5 @@
 from collections import defaultdict, OrderedDict
-
+import uuid
 import inspect
 import itertools
 import logging
@@ -333,7 +333,8 @@ class _XarrayStorage(_DiskStorage):
 
     def _merge_data_arrays(self, data_arrays):
         # https://stackoverflow.com/a/50125997/2225200
-        merged = xr.merge([similarity.rename('z') for similarity in data_arrays])['z'].rename(None)
+        temp_dim = str(uuid.uuid4())
+        merged = xr.merge([similarity.rename(temp_dim) for similarity in data_arrays])[temp_dim].rename(None)
         # ensure same class
         return type(data_arrays[0])(merged)
 
